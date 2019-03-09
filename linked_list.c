@@ -44,8 +44,10 @@ void insert(int value) {
             tail->value = value;
             tail->nextNode = 0;
         } else {
-            while (value >= current->nextNode->value) { // while value is smaller than next value
-                current = current->nextNode;
+            while (1) { // while (value >= current->nextNode->value)    why doesn't this work?
+                node* tempNext = current->nextNode;
+                if (value >= tempNext->value) current = current->nextNode; // while value is greater than next value
+                else break;
             }
 
             node *temp = current->nextNode; // hold a temp node* to keep the rest of the list
@@ -58,7 +60,18 @@ void insert(int value) {
     }
 }
 
+void freeList() {
+    current = head;
+    while (current != 0) {
+        while (current->nextNode != 0) {
+            current = current->nextNode;
+        }
+        free(current);
+        current = head;
+    }
+}
 
+// an empty list looks like a node *head and a node *tail pointing to the null pointer 0
 void run_linked_list() {
     printf("Running linked list\n");
 
@@ -67,7 +80,12 @@ void run_linked_list() {
 
     insert(5);
     insert(4);
+    insert(7);
+    insert(2);
+    insert(6);
 
     printLList();
 
+    freeList();
+    printf("\n");
 }
