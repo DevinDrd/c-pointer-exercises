@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
+typedef struct node {
     int value;
     struct node* nextNode;
 }node;
@@ -44,10 +44,8 @@ void insert(int value) {
             tail->value = value;
             tail->nextNode = 0;
         } else {
-            while (1) { // while (value >= current->nextNode->value)    why doesn't this work?
-                node* tempNext = current->nextNode;
-                if (value >= tempNext->value) current = current->nextNode; // while value is greater than next value
-                else break;
+            while (value >= current->nextNode->value) { // while (value >= current->nextNode->value)    why doesn't this work?
+                current = current->nextNode; // while value is greater than next value
             }
 
             node *temp = current->nextNode; // hold a temp node* to keep the rest of the list
@@ -63,9 +61,7 @@ void insert(int value) {
 void freeList() {
     current = head;
     while (current != 0) {
-        while (current->nextNode != 0) {
-            current = current->nextNode;
-        }
+        head = head->nextNode;
         free(current);
         current = head;
     }
